@@ -1,22 +1,38 @@
-def read_length(records):
+
+"""Calculate read length statistics from sequencing reads.
+
+This module calculates read length distributions, N50 and N90 read lengths,
+the percentage of reads above a specified length, and cumulative sequencing
+yield grouped by barcode.
+"""
+
+def get_read_lengths(records):
+    """Return the sequence length of each FASTQ record."""
     lengths = []
     for record in records:
         lengths.append(len(record["seq"]))
     return lengths
 
-# def read_length_distribution(lengths, ):
-def read_length_distribution(lengths, size):
+def read_length_distribution(lengths, bin_size):
+    """Group read lengths into ranges of a specified bin size."""
     distribution = {}
 
+    if bin_size <= 0:
+        raise ValueError("bin_size must be greater than 0")
+
     for current_length in lengths:
-        range_start = (current_length // size) * size
+        range_start = (current_length // bin_size) * bin_size
         distribution.setdefault(range_start, 0)
-        distribution[range_start]+= 1
+        distribution[range_start] += 1
 
     return distribution
 
-# def n50_read_length(...):
 def n50_read_length(lengths):
+    """Return the N50 read length."""
+
+    if not lengths:
+        return 0
+
     sorted_lengths = sorted(lengths, reverse=True)
     half_len = sum(lengths) / 2
 
@@ -28,8 +44,12 @@ def n50_read_length(lengths):
         if cumulative_length >= half_len:
             return length
 
-# def n90_read_length(...):
 def n90_read_length(lengths):
+    """Return the N90 read length."""
+
+    if not lengths:
+        return 0
+    
     sorted_lengths = sorted(lengths, reverse=True)
     target_yield = sum(lengths) * 0.9
 
@@ -41,11 +61,11 @@ def n90_read_length(lengths):
         if cumulative_length >= target_yield:
             return current_length
 
-# def percentage_above_length(...):
 def percentage_above_length(lengths, cutoff):
+    """Return the percentage of reads at or above a specified length."""
     num_above = 0
     for length in lengths:
-        if length >=  cutoff:
+        if length >= cutoff:
             num_above += 1
     try:
         percentage_above = (num_above / len(lengths)) * 100
@@ -54,8 +74,8 @@ def percentage_above_length(lengths, cutoff):
     else:
         return percentage_above
 
-# def cumulative_yield_per_barcode(...):
 def cumulative_yield_per_barcode(records):
+    """Return the total sequencing yield in bases for each barcode."""
     barcode_yield = {}
 
     for record in records:
