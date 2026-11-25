@@ -54,7 +54,19 @@ def filter_min_qscore(records, min_qscore):
 
     return filtered_records
 
-def filter_reads(records, min_length, max_length, min_qscore):
+def filter_max_qscore(records, max_qscore):
+    """Return FASTQ records with average Q-score at or below the maximum threshold."""
+    filtered_records = []
+
+    for record in records:
+        mean_qscore = average_qscore(record["qual"])
+
+        if mean_qscore <= max_qscore:
+            filtered_records.append(record)
+
+    return filtered_records
+
+def filter_reads(records, min_length, max_length, min_qscore, max_qscore):
     """Return FASTQ records that pass all length and average Q-score thresholds."""
     filtered_records = []
 
@@ -62,7 +74,7 @@ def filter_reads(records, min_length, max_length, min_qscore):
         read_length = len(record["seq"])
         mean_qscore = average_qscore(record["qual"])
 
-        if min_length <= read_length <= max_length and mean_qscore >= min_qscore:
+        if min_length <= read_length <= max_length and min_qscore <= mean_qscore <= max_qscore:
             filtered_records.append(record)
     return filtered_records
 
