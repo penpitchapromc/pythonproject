@@ -218,3 +218,46 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# =========================
+# Sequencing data
+# =========================
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
+
+# =========================
+# Temporary local test files
+# =========================
+read_fastq_tmp.py
+read_fastq_tmp.ipynb
+test_module3.py
+
+# =========================
+# Python generated files
+# =========================
+__pycache__/
+*.py[cod]
+
+# =========================
+# Jupyter generated files
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# Virtual environments
+# =========================
+.venv/
+venv/
+env/
+
+# =========================
+# macOS generated files
+# =========================
+.DS_Store
+
+# =========================
+# VS Code local settings
+# =========================
+.vscode/
