@@ -2,7 +2,6 @@
 """Calculate sequencing summary statistics grouped by barcode.
 
 The script accepts FASTQ or FASTQ.GZ files, or directories containing them,
-and writes one summary row per barcode to a CSV file.
 """
 
 import argparse
